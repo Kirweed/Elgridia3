@@ -5,11 +5,16 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 import pluginImport from "eslint-plugin-import";
 import tseslint from "typescript-eslint";
+import configPrettier from "eslint-config-prettier";
 
 export default tseslint.config(
   { ignores: ["dist"] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      pluginImport.configs.typescript,
+    ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
@@ -49,5 +54,12 @@ export default tseslint.config(
         },
       ],
     },
-  }
+    settings: {
+      "import/resolver": {
+        typescript: true,
+        node: true,
+      },
+    },
+  },
+  configPrettier
 );

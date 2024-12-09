@@ -13,7 +13,7 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
-      pluginImport.configs.typescript,
+      pluginImport.flatConfigs.typescript,
     ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
@@ -28,6 +28,7 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      "@typescript-eslint/no-unused-vars": "off",
       "react-refresh/only-export-components": [
         "warn",
         { allowConstantExport: true },
@@ -56,8 +57,13 @@ export default tseslint.config(
     },
     settings: {
       "import/resolver": {
-        typescript: true,
-        node: true,
+        typescript: {
+          alwaysTryTypes: true,
+          project: "./tsconfig.json",
+        },
+        node: {
+          paths: "src",
+        },
       },
     },
   },

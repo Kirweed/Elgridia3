@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import FantaisieArtistique from "src/assets/FantaisieArtistique.otf";
 
 export const GlobalStyle = createGlobalStyle`
   *,
@@ -12,6 +13,11 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     height: 100%;
+
+    @font-face {
+    font-family: FantaisieArtistique;
+    src: url(${FantaisieArtistique}) format("opentype");
+}
   }
 
   html {

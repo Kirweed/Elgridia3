@@ -1,11 +1,12 @@
 import { PropsWithChildren, HTMLAttributes } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface HeadingProps extends HTMLAttributes<HTMLElement> {
   level: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   align?: "unset" | "left" | "right" | "center";
   color?: string;
   margin?: number;
+  fantasy?: boolean;
 }
 
 const headingSizes = {
@@ -42,5 +43,11 @@ const Styled = {
     font-size: ${({ level }) => headingSizes[level]};
     font-weight: ${({ level }) => headingWeights[level]};
     text-align: ${({ align = "unset" }) => align};
+
+    ${({ fantasy }) =>
+      fantasy &&
+      css`
+        font-family: FantaisieArtistique;
+      `}
   `,
 };

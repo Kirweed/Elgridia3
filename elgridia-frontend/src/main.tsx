@@ -1,5 +1,6 @@
 import { ThemeProvider } from "styled-components";
 import { StrictMode } from "react";
+import { BrowserRouter } from "react-router";
 import { createRoot } from "react-dom/client";
 import { AuthProvider } from "src/modules/auth/context/AuthProvider.tsx";
 
@@ -11,8 +12,10 @@ createRoot(document.getElementById("root")!).render(
     <AuthProvider>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </ThemeProvider>
     </AuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );

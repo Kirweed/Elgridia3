@@ -30,7 +30,7 @@ export const useAuth = () => {
         setLoading((prev) => ({ ...prev, login: false }));
       }
     },
-    [setLoading, setError]
+    [setLoading, setError],
   );
 
   const logout = async () => {
@@ -49,7 +49,7 @@ export const useAuth = () => {
         }
       }
     },
-    [setError]
+    [setError],
   );
 
   return useMemo(
@@ -61,6 +61,6 @@ export const useAuth = () => {
       logout,
       resetPassword,
     }),
-    [user, error, login, resetPassword]
+    [user, error, login, resetPassword],
   );
 };

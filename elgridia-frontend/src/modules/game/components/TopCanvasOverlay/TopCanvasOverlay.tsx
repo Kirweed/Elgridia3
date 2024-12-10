@@ -1,21 +1,30 @@
-import { memo } from "react";
+import { Heading } from "src/common/components";
+import { useUserBaseInfo } from "src/common/hooks/useUserBaseInfo";
 import styled from "styled-components";
 
-export const TopCanvasOverlay = memo(() => (
-  <Styled.Container>
-    <Styled.HpBar />
-    <span>Username</span>
-    <span>1 lvl</span>
-    <Styled.FatigueBar />
-  </Styled.Container>
-));
+export const TopCanvasOverlay = () => {
+  const { nick, level } = useUserBaseInfo();
+
+  return (
+    <Styled.Container>
+      <Styled.HpBar />
+      <Heading level="h4" fantasy>
+        {nick}
+      </Heading>
+      <Heading level="h4" fantasy>
+        {level} lvl
+      </Heading>
+      <Styled.FatigueBar />
+    </Styled.Container>
+  );
+};
 
 const Styled = {
   Container: styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: ${({ theme }) => theme.colors.blue};
+    background-color: ${({ theme }) => theme.colors.main};
     border-radius: 10px;
     position: absolute;
     top: 5px;
@@ -29,8 +38,8 @@ const Styled = {
     top: 50%;
     left: -250px;
     width: 250px;
-    background-color: ${({ theme }) => theme.colors.error};
-    border: 4px solid ${({ theme }) => theme.colors.blue};
+    background-color: #cf2929;
+    border: 2px solid ${({ theme }) => theme.colors.main};
     border-right: none;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
@@ -44,7 +53,7 @@ const Styled = {
     right: -250px;
     width: 250px;
     background-color: white;
-    border: 4px solid ${({ theme }) => theme.colors.blue};
+    border: 2px solid ${({ theme }) => theme.colors.main};
     border-left: none;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;

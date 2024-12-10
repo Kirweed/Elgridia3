@@ -1,11 +1,13 @@
-import { Backpack } from "src/modules/game/components/Backpack/Backpack";
-import Eq from "src/modules/game/components/Equipment/Equipment";
+import { Text } from "src/common/components";
+import { Backpack, Equipment } from "src/modules/game/components";
 import styled from "styled-components";
 
 export const RightGameSidebar = () => (
   <Styled.Container>
-    <Eq />
-    <span>Plecak: </span>
+    <Equipment />
+    <Text size="L" fantasy>
+      Plecak:
+    </Text>
     <Backpack />
   </Styled.Container>
 );

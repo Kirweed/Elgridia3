@@ -3,3 +3,4 @@ export * from "./Input";
 export * from "./Flex";
 export * from "./Loader";
 export * from "./DarkOverlay";
+export * from "./Text";

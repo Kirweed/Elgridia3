@@ -5,11 +5,17 @@ import {
   LocationInfoBar,
   RightGameSidebar,
 } from "src/modules/game/components";
+import { Overworld } from "src/modules/game/engine";
 import styled from "styled-components";
 
 export const GameView = () => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const gameContainer = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const overworld = new Overworld({ canvas, gameContainer });
+    overworld.init();
+  }, [canvas]);
 
   return (
     <>

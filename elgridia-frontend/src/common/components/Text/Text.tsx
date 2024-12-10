@@ -2,46 +2,42 @@ import { PropsWithChildren, HTMLAttributes } from "react";
 import styled, { css } from "styled-components";
 
 interface HeadingProps extends HTMLAttributes<HTMLElement> {
-  level: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  size: "XL" | "L" | "M" | "S" | "XS";
   align?: "unset" | "left" | "right" | "center";
   color?: string;
   margin?: number;
   fantasy?: boolean;
 }
 
-const headingSizes = {
-  h1: "48px",
-  h2: "36px",
-  h3: "24px",
-  h4: "20px",
-  h5: "16px",
-  h6: "12px",
+const sizes = {
+  XL: "16px",
+  L: "16px",
+  M: "14px",
+  S: "14px",
+  XS: "12px",
 };
 
-const headingWeights = {
-  h1: "700",
-  h2: "600",
-  h3: "600",
-  h4: "600",
-  h5: "700",
-  h6: "700",
+const weights = {
+  XL: "600",
+  L: "400",
+  M: "600",
+  S: "400",
+  XS: "600",
 };
 
-export const Heading = ({
+export const Text = ({
   children,
   ...props
 }: PropsWithChildren<HeadingProps>) => (
-  <Styled.Text as={props.level} {...props}>
-    {children}
-  </Styled.Text>
+  <Styled.Text {...props}>{children}</Styled.Text>
 );
 
 const Styled = {
   Text: styled.div<HeadingProps>`
     margin: ${({ margin = 0 }) => `0 0 ${margin}px`};
     color: ${({ theme, color }) => color ?? theme.colors.white};
-    font-size: ${({ level }) => headingSizes[level]};
-    font-weight: ${({ level }) => headingWeights[level]};
+    font-size: ${({ size }) => sizes[size]};
+    font-weight: ${({ size }) => weights[size]};
     text-align: ${({ align = "unset" }) => align};
 
     ${({ fantasy }) =>

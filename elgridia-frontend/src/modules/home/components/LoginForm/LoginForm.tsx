@@ -86,7 +86,7 @@ export const LoginForm: FC = () => {
               )}
             </Flex>
           </Flex>
-          <Button type="submit" varaint="primary">
+          <Button type="submit" variant="primary">
             Log in
           </Button>
         </Flex>

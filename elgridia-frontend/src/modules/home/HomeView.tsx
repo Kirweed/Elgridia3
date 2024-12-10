@@ -39,7 +39,7 @@ const Styled = {
     width: 100%;
     height: 10vh;
     padding: 4px 28px;
-    background-color: ${({ theme }) => theme.colors.light};
+    background-color: ${({ theme }) => theme.colors.main};
     font-family: FantaisieArtistique;
     display: flex;
     align-items: center;

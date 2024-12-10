@@ -4,6 +4,7 @@ import { FirebaseError } from "@firebase/util";
 import { auth } from "src/common/services/firebase";
 import { setAccessToken, setRefreshToken } from "src/modules/auth/utils/token";
 import { AuthContext } from "src/modules/auth/context/AuthContext";
+import { Loader } from "src/common/components";
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -24,7 +25,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   if (Object.values(loading).some((item) => item)) {
-    return null;
+    return <Loader />;
   }
 
   const value = {

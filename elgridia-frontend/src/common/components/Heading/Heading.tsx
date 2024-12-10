@@ -39,7 +39,7 @@ export const Heading = ({
 const Styled = {
   Text: styled.div<HeadingProps>`
     margin: ${({ margin = 0 }) => `0 0 ${margin}px`};
-    color: ${({ theme, color = theme.colors.white }) => color};
+    color: ${({ theme, color }) => color ?? theme.colors.white};
     font-size: ${({ level }) => headingSizes[level]};
     font-weight: ${({ level }) => headingWeights[level]};
     text-align: ${({ align = "unset" }) => align};

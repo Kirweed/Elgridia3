@@ -46,7 +46,7 @@ const Styled = {
   Field: styled.input<{ isError: boolean }>`
     border: 2px solid
       ${({ theme, isError }) =>
-        isError ? theme.colors.warn : theme.colors.light};
+        isError ? theme.colors.warn : theme.colors.main};
     height: 48px;
     padding: 12px;
     gap: 10px;

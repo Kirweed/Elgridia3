@@ -1,6 +1,4 @@
 import { RefObject } from "react";
-import DefaultMapImage from "src/assets/maps/start-valley.png";
-import CharacterImage from "src/assets/sprites/woj1.png";
 
 import { OverworldMap } from "./OverworldMap";
 import { Player } from "./Player";
@@ -9,20 +7,27 @@ import { DirectionInput } from "./DirectionInput";
 interface OverworldConfig {
   canvas: RefObject<HTMLCanvasElement>;
   gameContainer: RefObject<HTMLDivElement>;
+  setIsLoading: (isLoading: boolean) => void;
+  player: Player;
+  map: OverworldMap;
 }
 
 export class Overworld {
   canvas: RefObject<HTMLCanvasElement>;
   gameContainer: RefObject<HTMLDivElement>;
   ctx: CanvasRenderingContext2D | null;
-  map: OverworldMap | null;
   directionInput?: DirectionInput;
+  setIsLoading: (isLoading: boolean) => void;
+  player: Player;
+  map: OverworldMap;
 
   constructor(config: OverworldConfig) {
     this.canvas = config.canvas;
     this.gameContainer = config.gameContainer;
     this.ctx = this.canvas.current?.getContext("2d") || null;
-    this.map = null;
+    this.setIsLoading = config.setIsLoading;
+    this.player = config.player;
+    this.map = config.map;
   }
 
   startGameLoop() {
@@ -36,7 +41,7 @@ export class Overworld {
         this.canvas.current.height,
       );
 
-      const cameraContext = this.map.players.hero;
+      const cameraContext = this.player;
 
       this.map.drawImage(
         this.ctx,
@@ -44,17 +49,16 @@ export class Overworld {
         this.canvas.current.width,
         this.canvas.current.height,
       );
-      Object.values(this.map.players).forEach((player) => {
-        player.update(this.directionInput?.currentDirection);
-        if (this.ctx && this.canvas.current && this.map)
-          player.sprite.draw(
-            this.ctx,
-            cameraContext,
-            this.canvas.current.width,
-            this.canvas.current.height,
-            this.map.image,
-          );
-      });
+      this.player.update(this.directionInput?.currentDirection);
+      if (this.ctx && this.canvas.current && this.map) {
+        this.player.sprite.draw(
+          this.ctx,
+          cameraContext,
+          this.canvas.current.width,
+          this.canvas.current.height,
+          this.map.image,
+        );
+      }
       Object.values(this.map.npcs || {}).forEach((object) => {
         if (this.ctx && this.canvas.current && this.map)
           object.sprite.draw(
@@ -83,19 +87,11 @@ export class Overworld {
   init() {
     this.resizeCanvas();
     window.addEventListener("resize", () => this.resizeCanvas.call(this));
-    const hero = new Player({
-      x: 5 * 32,
-      y: 5 * 32,
-      src: CharacterImage,
-    });
-    this.map = new OverworldMap({
-      src: DefaultMapImage,
-      players: { hero },
-    });
 
     this.directionInput = new DirectionInput();
     this.directionInput.init();
 
     this.startGameLoop();
+    this.setIsLoading(false);
   }
 }

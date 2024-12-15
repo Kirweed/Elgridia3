@@ -1,13 +1,14 @@
 import styled from "styled-components";
 
 interface LocationInfoBarProps {
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
+  name?: string;
 }
 
-export const LocationInfoBar = ({ x, y }: LocationInfoBarProps) => (
+export const LocationInfoBar = ({ x, y, name }: LocationInfoBarProps) => (
   <Styled.Container>
-    <span>Nazwa lokalizacji</span>
+    <span>{name}</span>
     <span>{`${x}, ${y}`}</span>
   </Styled.Container>
 );

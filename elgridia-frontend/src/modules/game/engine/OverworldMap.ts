@@ -4,20 +4,23 @@ import { mapEdgeToStick } from "./utils/mapShouldStickToEdge";
 
 interface OverworldMapConfig {
   npcs?: Record<string, GameObject>;
-  players: Record<string, Player>;
   src: string;
+  id: number;
+  name: string;
 }
 
 export class OverworldMap {
   npcs?: Record<string, GameObject>;
-  players: Record<string, Player>;
   image: HTMLImageElement;
+  id: number;
+  name: string;
 
   constructor(config: OverworldMapConfig) {
     this.npcs = config.npcs;
-    this.players = config.players;
     this.image = new Image();
     this.image.src = config.src;
+    this.id = config.id;
+    this.name = config.name;
   }
 
   drawImage(

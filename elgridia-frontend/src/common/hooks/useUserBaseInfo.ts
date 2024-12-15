@@ -4,5 +4,5 @@ import { BaseInfo } from "src/common/types/PlayerTypes";
 export const useUserBaseInfo = () => {
   const [baseInfo] = useDocument<BaseInfo>("baseInfo");
 
-  return { level: baseInfo?.level, nick: baseInfo?.nick };
+  return { ...baseInfo };
 };

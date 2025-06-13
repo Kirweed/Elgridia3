@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { UpdatePlayerLocation } from "src/modules/game/hooks";
+import { Controls } from "src/modules/game/engine/types";
+import gameManager from "src/modules/game/engine/GameManager/GameManager";
+import { setPlayerPosition } from "src/store/gameReducer";
 
 import GameObject from "./GameObject";
-import { Directions } from "./types";
 
 export class Player extends GameObject {
-  [key: string]: any;
+  [x: string]: any;
   movingProgressRemaining: number;
-  direction: Directions;
-  directionUpdate: Record<Directions, [string, number]>;
+  direction: Controls;
+  directionUpdate: Record<Controls, [string, number]>;
   isPlayer: true;
-  updatePlayerLocation: UpdatePlayerLocation;
   frameSpeed: number;
 
   constructor(config: any) {
@@ -19,7 +18,6 @@ export class Player extends GameObject {
     this.movingProgressRemaining = 0;
     this.direction = config.direction || "down";
     this.isPlayer = true;
-    this.updatePlayerLocation = config.updatePlayerLocation;
     this.frameSpeed = config.frameSpeed;
 
     this.directionUpdate = {
@@ -30,7 +28,7 @@ export class Player extends GameObject {
     };
   }
 
-  update(direction?: Directions | null) {
+  update(direction?: Controls | null) {
     this.updatePosition();
     this.udpateSprite(direction);
 
@@ -38,7 +36,7 @@ export class Player extends GameObject {
       this.direction = direction;
       this.movingProgressRemaining = this.frameSpeed;
       const newLocation = this.getFuturePlayerCords();
-      this.updatePlayerLocation(newLocation);
+      gameManager.dispatchToRedux(setPlayerPosition({ ...newLocation, id: 0 }));
     }
   }
 
@@ -60,7 +58,7 @@ export class Player extends GameObject {
     };
   }
 
-  udpateSprite(direction?: Directions | null) {
+  udpateSprite(direction?: Controls | null) {
     if (this.movingProgressRemaining === 0 && !direction) {
       this.sprite.setAnimation(`idle-${this.direction}`);
       return;

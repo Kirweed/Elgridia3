@@ -1,36 +1,57 @@
 import { RefObject } from "react";
+import gameManager from "src/modules/game/engine/GameManager/GameManager";
+import { OverworldMap } from "src/modules/game/engine/OverworldMap";
+import { Player } from "src/modules/game/engine/Player";
+import CharacterImage from "src/assets/sprites/woj1.png";
+import { setLoading } from "src/store/gameReducer";
+import { maps } from "src/modules/game/engine/data/maps";
+import { Control } from "src/modules/game/engine/Control/Control";
 
-import { OverworldMap } from "./OverworldMap";
-import { Player } from "./Player";
-import { DirectionInput } from "./DirectionInput";
-
-interface OverworldConfig {
+interface EngineConfig {
   canvas: RefObject<HTMLCanvasElement>;
   gameContainer: RefObject<HTMLDivElement>;
-  setIsLoading: (isLoading: boolean) => void;
-  player: Player;
-  map: OverworldMap;
 }
 
-export class Overworld {
+export class GameEngine {
   canvas: RefObject<HTMLCanvasElement>;
   gameContainer: RefObject<HTMLDivElement>;
   ctx: CanvasRenderingContext2D | null;
-  directionInput?: DirectionInput;
-  setIsLoading: (isLoading: boolean) => void;
+  isLoading: boolean;
   player: Player;
-  map: OverworldMap;
+  map?: OverworldMap;
 
-  constructor(config: OverworldConfig) {
-    this.canvas = config.canvas;
-    this.gameContainer = config.gameContainer;
+  constructor({ canvas, gameContainer }: EngineConfig) {
+    this.isLoading = true;
+    this.canvas = canvas;
+    this.gameContainer = gameContainer;
     this.ctx = this.canvas.current?.getContext("2d") || null;
-    this.setIsLoading = config.setIsLoading;
-    this.player = config.player;
-    this.map = config.map;
+    this.player = this.loadPlayer();
+  }
+
+  loadMap() {
+    const { id } = gameManager.getCurrentReduxState().game.location;
+    const foundedMap = maps.find(({ id: mapId }) => mapId === id);
+    if (foundedMap) {
+      this.map = new OverworldMap({
+        src: foundedMap.img,
+        id: foundedMap.id,
+        name: foundedMap.name,
+      });
+    }
+  }
+
+  loadPlayer() {
+    return new Player({
+      x: gameManager.getCurrentReduxState().game.location.x * 32,
+      y: gameManager.getCurrentReduxState().game.location.y * 32,
+      src: CharacterImage,
+      frameSpeed: 32,
+    });
   }
 
   startGameLoop() {
+    gameManager.dispatchToRedux(setLoading(false));
+    this.loadMap();
     const step = () => {
       if (!this.ctx || !this.canvas.current || !this.map) return;
 
@@ -49,7 +70,9 @@ export class Overworld {
         this.canvas.current.width,
         this.canvas.current.height,
       );
-      this.player.update(this.directionInput?.currentDirection);
+      this.player.update(
+        gameManager.getCurrentReduxState().game.currentDirection,
+      );
       if (this.ctx && this.canvas.current && this.map) {
         this.player.sprite.draw(
           this.ctx,
@@ -59,16 +82,6 @@ export class Overworld {
           this.map.image,
         );
       }
-      Object.values(this.map.npcs || {}).forEach((object) => {
-        if (this.ctx && this.canvas.current && this.map)
-          object.sprite.draw(
-            this.ctx,
-            cameraContext,
-            this.canvas.current.width,
-            this.canvas.current.height,
-            this.map.image,
-          );
-      });
 
       requestAnimationFrame(() => {
         step();
@@ -88,10 +101,8 @@ export class Overworld {
     this.resizeCanvas();
     window.addEventListener("resize", () => this.resizeCanvas.call(this));
 
-    this.directionInput = new DirectionInput();
-    this.directionInput.init();
+    new Control();
 
     this.startGameLoop();
-    this.setIsLoading(false);
   }
 }

@@ -5,9 +5,7 @@ import { setCurrentDirection } from "src/store/gameReducer";
 export class Control {
   constructor() {
     document.addEventListener("keydown", (e) => {
-      console.log(e.code, defaultControls);
       if (Object.keys(defaultControls).includes(e.code)) {
-        console.log(e.code, "xxxxxxd");
         gameManager.dispatchToRedux(
           setCurrentDirection(defaultControls[e.code]),
         );

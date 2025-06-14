@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Controls } from "src/modules/game/engine/types";
 import gameManager from "src/modules/game/engine/GameManager/GameManager";
-import { setPlayerPosition } from "src/store/gameReducer";
+import { updatePlayerPosition } from "src/modules/game/engine/asyncActions/updatePlayerPosition";
 
 import GameObject from "./GameObject";
 
@@ -36,7 +36,9 @@ export class Player extends GameObject {
       this.direction = direction;
       this.movingProgressRemaining = this.frameSpeed;
       const newLocation = this.getFuturePlayerCords();
-      gameManager.dispatchToRedux(setPlayerPosition({ ...newLocation, id: 0 }));
+      gameManager.dispatchToRedux(
+        updatePlayerPosition({ ...newLocation, id: 0 }),
+      );
     }
   }
 

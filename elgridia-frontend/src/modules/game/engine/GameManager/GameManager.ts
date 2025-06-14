@@ -28,7 +28,7 @@ class GameManager {
   }
 
   // === Metody inicjalizacji i zarządzania ===
-  public startGame(gameEngineConfig: GameEngineConfig): void {
+  public async startGame(gameEngineConfig: GameEngineConfig) {
     if (this.gameEngine) {
       console.warn("Game engine already started.");
       return;
@@ -36,13 +36,12 @@ class GameManager {
 
     console.log("Starting game engine and Firebase listeners...");
 
-    // GameEngine nie dostaje już dispatch/getState. Zamiast tego dostaje GameManager.
-    this.gameEngine = new GameEngine(gameEngineConfig); // Przekazujemy referencję do GameManagera
-    this.gameEngine.init(); // Uruchamiamy pętlę silnika
-
-    this.unsubscribeFirebase = (store.dispatch as AppDispatch)(
+    this.unsubscribeFirebase = await (store.dispatch as AppDispatch)(
       listenToPlayerPosition(),
     );
+
+    this.gameEngine = new GameEngine(gameEngineConfig); // Przekazujemy referencję do GameManagera
+    this.gameEngine.init(); // Uruchamiamy pętlę silnika
 
     console.log("Game started.");
   }

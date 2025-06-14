@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { updatePlayerPosition } from "src/modules/game/engine/asyncActions/updatePlayerPosition";
 import { Controls, GameState, Location } from "src/modules/game/engine/types";
 
 const initialState: GameState = {
@@ -20,24 +19,9 @@ const gameSlice = createSlice({
       state.currentDirection = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
+      console.log(action.payload);
       state.loading = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(updatePlayerPosition.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(updatePlayerPosition.fulfilled, (state) => {
-        state.loading = false;
-        console.log(
-          "Player position update fulfilled (Firebase confirmed). Redux state will be updated by RTDB listener.",
-        );
-      })
-      .addCase(updatePlayerPosition.rejected, (state) => {
-        state.loading = false;
-        //state.error = action.payload || 'Failed to update player position';
-      });
   },
 });
 
